@@ -9,5 +9,7 @@ This script suppose the use of mpv, livestreamer and terminal-notifier.
 User name and mpv & livestreamer location need to be set in [bash_script_twitch].
 
 This script must be set with "crontab -e" to be executed every e.g. min 
->> * * * * * python3 ~/.stream/growlerStreams.py (run every minutes)
+* * * * * * python3 ~/.stream/growlerStreams.py (run every minutes)
+
+ATM : live notification can only be replaced (eg the title changes) but not removed if the stream goes off in the Notification Center.
 
