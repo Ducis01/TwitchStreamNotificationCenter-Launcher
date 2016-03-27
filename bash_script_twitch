@@ -1,5 +1,0 @@
-#!/bin/bash
-
-say "Lanching" $1 "Stream" &
-/usr/local/bin/livestreamer -p /usr/local/Cellar/mpv/0.16.0/bin/mpv twitch.tv/$1 source --hls-live-edge 10 --hls-segment-threads 2
-say "End of stream"
