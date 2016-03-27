@@ -78,11 +78,8 @@ prev_stream = load_obj("prev_stream")
 # Get current notifications
 process = check_output([TERMINAL_NOTIFIER, '-list', 'ALL'])
 
-print("V3")
 current_notif = str(process).split("\\n")
 current_notif = [ notif.split("\\t")[0].replace("STREAM", "") for notif in current_notif][1:-1]
-
-print(current_notif)
 
 # For online streams
 for streamer in stream.keys() :
@@ -153,7 +150,6 @@ for streamer in prev_stream.keys() - stream.keys():
         " -open " + FOLLOWING
     
     call(cmd, shell=True)
-    print("REMOVING previous notifatication for " + streamer)
 
 # save the streams that are online
 save_obj(stream, "prev_stream")
