@@ -110,7 +110,12 @@ for streamer in stream.keys() :
 
         # Image/Icon in "subprocess.Popen" doesn't work, since it use a PRIVATE method feature
         # simple system call to override the img prob
-        os.system(cmd)
+        #print(cmd.encode('utf-8'))
+        
+        # We can only launch a stream every 10 sec
+        # its the time for livestreamer to be ready on average
+        # so we can kill the parent
+        subprocess.call(cmd + " & sleep 10; killAll terminal-notifier", shell=True)
 
 for streamer in prev_stream.keys() - stream.keys():
     cmd = "terminal-notifier -remove STREAM" + streamer
