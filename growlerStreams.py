@@ -7,7 +7,8 @@
     Copyright (C) 2016, Université catholique de Louvain
 """
 
-import sys, json, requests, subprocess, os, urllib, pickle
+import sys, json, requests, os, urllib, pickle
+from subprocess import check_output, PIPE, call
 
 # Glob Var
 STATUS = "status"
@@ -18,6 +19,9 @@ DIR    = sys.argv[2]
 PLAYER = sys.argv[5]
 TERMINAL_NOTIFIER = sys.argv[3]
 LIVESTREAMER      = sys.argv[4]
+
+TWITCH =  os.path.join(DIR, "twitch.png")
+FOLLOWING = "https://www.twitch.tv/directory/following"
 
 # define tmp directory
 tmp  = "/tmp/twitchNotif/"
@@ -71,13 +75,25 @@ stream  = {streamer: {STATUS : status, LOGO : logo}  for [streamer, status, logo
 # load previous info
 prev_stream = load_obj("prev_stream")
 
+# Get current notifications
+process = check_output([TERMINAL_NOTIFIER, '-list', 'ALL'])
+
+print("V3")
+current_notif = str(process).split("\\n")
+current_notif = [ notif.split("\\t")[0].replace("STREAM", "") for notif in current_notif][1:-1]
+
+print(current_notif)
+
 # For online streams
 for streamer in stream.keys() :
 
     # if user already on and notified - dont show
+    # if new stream - show
+    # if the user has clicked the notification - reshow it
     # if the status has changed - show
     
-    if streamer not in prev_stream or stream[streamer][STATUS] != prev_stream[streamer][STATUS]:
+    if streamer not in prev_stream or streamer not in current_notif or \
+        stream[streamer][STATUS] != prev_stream[streamer][STATUS]:
         
         
         # Fetch the logo if we dont have it locally
@@ -95,7 +111,6 @@ for streamer in stream.keys() :
         grp   = "STREAM"    + streamer
         title = '"🍿 ' + streamer + ' is LIVE 🍿 "'
         img   =  os.path.join(tmp, streamer)
-        twitch=  os.path.join(DIR, "twitch.png")
         script= '"' +  os.path.join(DIR, "bash_script_twitch.bash ") + streamer + \
                 " " + LIVESTREAMER + " " + PLAYER +\
                 '& sleep 10; killAll terminal-notifier"'
@@ -106,7 +121,7 @@ for streamer in stream.keys() :
               " -message " + msg + \
               " -title "   + title + \
               " -contentImage " + img +\
-              " -appIcon "      + twitch  +\
+              " -appIcon "      + TWITCH  +\
               " -execute "      + script
 
         # Image/Icon in "subprocess.Popen" doesn't work, since it use a PRIVATE method feature
@@ -116,12 +131,29 @@ for streamer in stream.keys() :
         # We can only launch a stream every 10 sec
         # its the time for livestreamer to be ready on average
         # so we can kill the parent
-        subprocess.call(cmd, shell=True)
+        call(cmd, shell=True)
 
+# To remove a notification we have to create a new one
+# Therefore, we assign each DC to a group called STREAM
+# so we dont have a new notification for each offline stream
+# that stack in the Notification Center
 for streamer in prev_stream.keys() - stream.keys():
-    cmd = "terminal-notifier -remove STREAM" + streamer
-    os.system(cmd)
-    print(streamer)
+    
+    msg   = '"is now offline."'
+    title = streamer
+    img   = os.path.join(tmp, streamer)
+    
+    cmd = TERMINAL_NOTIFIER + \
+        " -remove STREAM" + streamer + \
+        " -group STREAM" + \
+        " -message " + msg + \
+        " -title "   + title + \
+        " -contentImage " + img +\
+        " -appIcon "      + TWITCH +\
+        " -open " + FOLLOWING
+    
+    call(cmd, shell=True)
+    print("REMOVING previous notifatication for " + streamer)
 
 # save the streams that are online
 save_obj(stream, "prev_stream")
