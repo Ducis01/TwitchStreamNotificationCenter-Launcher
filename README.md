@@ -22,7 +22,7 @@ Change in [_.plist] under "ProgramArguments" :
 
 
 This script must be set with launchD to work every minute :
-> mv be.ducis01.notiftwitch.agent.plist $HOME/Library/LaunchAgents/
+> mv be.ducis01.notiftwitch.agent.plist $HOME/Library/LaunchAgents/  
 > launchctl load $HOME/Library/LaunchAgents/be.ducis01.notiftwitch.agent.plist
 
 ATM : live notification can only be replaced (eg the title changes) but not removed if the stream goes off in the Notification Center.
