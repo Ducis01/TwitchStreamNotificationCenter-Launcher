@@ -97,7 +97,8 @@ for streamer in stream.keys() :
         img   =  os.path.join(tmp, streamer)
         twitch=  os.path.join(DIR, "twitch.png")
         script= '"' +  os.path.join(DIR, "bash_script_twitch.bash ") + streamer + \
-                " " + LIVESTREAMER + " " + PLAYER +'"'
+                " " + LIVESTREAMER + " " + PLAYER +\
+                '& sleep 10; killAll terminal-notifier"'
 
 
         cmd = TERMINAL_NOTIFIER + \
@@ -115,7 +116,7 @@ for streamer in stream.keys() :
         # We can only launch a stream every 10 sec
         # its the time for livestreamer to be ready on average
         # so we can kill the parent
-        subprocess.call(cmd + " & sleep 10; killAll terminal-notifier", shell=True)
+        subprocess.call(cmd, shell=True)
 
 for streamer in prev_stream.keys() - stream.keys():
     cmd = "terminal-notifier -remove STREAM" + streamer
