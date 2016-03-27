@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
     Fetch streams and display built-in notification that lanch stream on clic
     Author: Nicolas Van Wallendael <nicolas.vanwallendael@student.uclouvain.be>
@@ -7,22 +9,31 @@
 
 import sys, json, requests, subprocess, os, urllib, pickle
 
-def save_obj(obj, name ):
-    with open('obj/'+ name + '.pkl', 'wb') as f:
-        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
-
-def load_obj(name ):
-    with open('obj/' + name + '.pkl', 'rb') as f:
-        return pickle.load(f)
-
-
 # Glob Var
 STATUS = "status"
 LOGO   = "logo"
+TERMINAL_NOTIFIER = "/usr/local/bin/terminal-notifier"
 
-# define user
+# define user and save directory
 user = "Duciis"
-dir  =  os.getcwd()
+tmp  = "/tmp/twitchNotif/"
+dir  = "~/.stream/"
+
+def save_obj(obj, name ):
+    if not os.path.exists(tmp):
+        os.makedirs(tmp)
+    
+    with open(tmp + name + '.pkl', 'wb') as f:
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+
+def load_obj(name ):
+    if not os.path.isfile(tmp + name + '.pkl') :
+        if not os.path.exists(tmp):
+            os.makedirs(tmp)
+        return {}
+    else :
+        with open(tmp + name + '.pkl', 'rb') as f:
+            return pickle.load(f)
 
 
 # Request URL
@@ -72,7 +83,7 @@ print(output)
 
 # load previous info
 prev_stream = load_obj("prev_stream")
-
+print("HELLO")
 # For online streams
 for streamer in stream.keys() :
 
@@ -84,7 +95,7 @@ for streamer in stream.keys() :
         
         # Fetch the logo if we dont have it locally
         if not os.path.isfile(streamer) :
-            urllib.request.urlretrieve(stream[streamer][LOGO], streamer)
+            urllib.request.urlretrieve(stream[streamer][LOGO], tmp + streamer)
 
 
         # NOTE <> INSIDE terminal-notifier :
@@ -96,12 +107,12 @@ for streamer in stream.keys() :
         msg   = '"\\' + stream[streamer][STATUS] + '"'
         grp   = "STREAM"    + streamer
         title = '"🍿 ' + streamer + ' is LIVE 🍿 "'
-        img   =  os.path.join(dir, streamer)
+        img   =  os.path.join(tmp, streamer)
         twitch=  os.path.join(dir, "twitch.png")
         script= '"' +  os.path.join(dir, "bash_script_twitch ") + streamer + '"'
 
 
-        cmd = "terminal-notifier" + \
+        cmd = TERMINAL_NOTIFIER + \
               " -group "   + grp + \
               " -message " + msg + \
               " -title "   + title + \
@@ -113,7 +124,7 @@ for streamer in stream.keys() :
         # simple system call to override the img prob
         os.system(cmd)
 
-for streamer in stream.keys() - prev_stream.keys() :
+for streamer in prev_stream.keys() - stream.keys():
     cmd = "terminal-notifier -remove STREAM" + streamer
     os.system(cmd)
     print(streamer)
