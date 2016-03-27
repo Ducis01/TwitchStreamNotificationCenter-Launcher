@@ -1,9 +1,10 @@
 # TwitchStreamNotificationCenter-Launcher
 
-This python script produces Mac OS X built-in notifications for any live stream followed by a user on twitch.
-A notification is produce for a new live or title change.
+This python script produces Mac OS X (>10.9) built-in notifications for any live stream followed by a user on twitch.
+A notification is produce for a new live or title change or a stream going offline.
 Each notification has the title of the stream and the stream logo.
 Each notification is also click-able and launch the stream in mpv.
+Offline notification open 'Twitch following' on default browser.
 
 This script suppose the use of python3, mpv (https://github.com/mpv-player/mpv), livestreamer (https://github.com/chrippa/livestreamer) and terminal-notifier (https://github.com/julienXX/terminal-notifier).
 
@@ -26,7 +27,6 @@ This script must be set with launchD to work every minute :
 > launchctl load $HOME/Library/LaunchAgents/be.ducis01.notiftwitch.agent.plist  
 > chmod +x *.bash 
 
-ATM : live notification can only be replaced (eg the title changes) but not removed if the stream goes off in the Notification Center.
 
 ## Screenshots :
 
