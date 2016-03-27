@@ -3,12 +3,12 @@
 This python script produces Mac OS X built-in notifications for any live stream followed by a user on twitch.
 A notification is produce for a new live or title change.
 Each notification has the title of the stream and the stream logo.
-Each notification is also clicakge and lanch the stream in mpv.
+Each notification is also click-able and launch the stream in mpv.
 
 This script suppose the use of python3, mpv (https://github.com/mpv-player/mpv), livestreamer (https://github.com/chrippa/livestreamer) and terminal-notifier (https://github.com/julienXX/terminal-notifier).
 
 
-#TO MAKE IT WORK
+## TO MAKE IT WORK
 
 Change in [_.plist] under "ProgramArguments" :
 
@@ -27,7 +27,7 @@ This script must be set with launchD to work every minute :
 
 ATM : live notification can only be replaced (eg the title changes) but not removed if the stream goes off in the Notification Center.
 
-# Screenshots :
+## Screenshots :
 
 ![Image of a Notification](https://raw.githubusercontent.com/Ducis01/TwitchStreamNotificationCenter-Launcher/master/screenshot/notification.png)
 
