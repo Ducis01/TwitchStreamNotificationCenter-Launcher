@@ -44,7 +44,7 @@ def load_obj(name ):
 
 
 # Request URL
-url_follow = "https://api.twitch.tv/kraken/users/" + USER + "/follows/channels"
+url_follow = "https://api.twitch.tv/kraken/users/" + USER + "/follows/channels?direction=DESC&limit=500&offset=0&sortby=created_at"
 url_online = "https://api.twitch.tv/kraken/streams?channel="
 
 
