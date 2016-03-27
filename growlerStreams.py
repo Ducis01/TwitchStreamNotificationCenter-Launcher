@@ -12,12 +12,15 @@ import sys, json, requests, subprocess, os, urllib, pickle
 # Glob Var
 STATUS = "status"
 LOGO   = "logo"
-TERMINAL_NOTIFIER = "/usr/local/bin/terminal-notifier"
 
-# define user and save directory
-user = "Duciis"
+USER   = sys.argv[1]
+DIR    = sys.argv[2]
+PLAYER = sys.argv[5]
+TERMINAL_NOTIFIER = sys.argv[3]
+LIVESTREAMER      = sys.argv[4]
+
+# define tmp directory
 tmp  = "/tmp/twitchNotif/"
-dir  = "~/.stream/"
 
 def save_obj(obj, name ):
     if not os.path.exists(tmp):
@@ -37,7 +40,7 @@ def load_obj(name ):
 
 
 # Request URL
-url_follow = "https://api.twitch.tv/kraken/users/" + user + "/follows/channels"
+url_follow = "https://api.twitch.tv/kraken/users/" + USER + "/follows/channels"
 url_online = "https://api.twitch.tv/kraken/streams?channel="
 
 
@@ -65,25 +68,9 @@ stream  = {streamer: {STATUS : status, LOGO : logo}  for [streamer, status, logo
 
 # Mac OS X Notifiactions
 
-
-# Image in subprocess doesn't work, since it use a PRIVATE method feature
-"""
-notif = subprocess.Popen(["/usr/local/bin/terminal-notifier",\
-                         "-group",        grp,\
-                         "-title",        title,\
-                         "-message",      msg,\
-                         "-contentImage", img,\
-                         "-appIcon",      twitch,\
-                         "-execute",      script],
-                         stdout=subprocess.PIPE)
-
-output = notif.communicate()[0]
-print(output)
-"""
-
 # load previous info
 prev_stream = load_obj("prev_stream")
-print("HELLO")
+
 # For online streams
 for streamer in stream.keys() :
 
@@ -108,8 +95,9 @@ for streamer in stream.keys() :
         grp   = "STREAM"    + streamer
         title = '"🍿 ' + streamer + ' is LIVE 🍿 "'
         img   =  os.path.join(tmp, streamer)
-        twitch=  os.path.join(dir, "twitch.png")
-        script= '"' +  os.path.join(dir, "bash_script_twitch ") + streamer + '"'
+        twitch=  os.path.join(DIR, "twitch.png")
+        script= '"' +  os.path.join(DIR, "bash_script_twitch.bash ") + streamer + \
+                " " + LIVESTREAMER + " " + PLAYER +'"'
 
 
         cmd = TERMINAL_NOTIFIER + \
@@ -120,7 +108,7 @@ for streamer in stream.keys() :
               " -appIcon "      + twitch  +\
               " -execute "      + script
 
-
+        # Image/Icon in "subprocess.Popen" doesn't work, since it use a PRIVATE method feature
         # simple system call to override the img prob
         os.system(cmd)
 
