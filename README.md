@@ -23,3 +23,9 @@ This script must be set with launchD to work every minute :
 
 ATM : live notification can only be replaced (eg the title changes) but not removed if the stream goes off in the Notification Center.
 
+Screenshots :
+
+![Image of a Notification](https://raw.githubusercontent.com/Ducis01/TwitchStreamNotificationCenter-Launcher/master/screenshot/notification.png)
+
+![Image of Notification Center](https://raw.githubusercontent.com/Ducis01/TwitchStreamNotificationCenter-Launcher/master/screenshot/notification_center.png)
+
