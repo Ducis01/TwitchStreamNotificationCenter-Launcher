@@ -3,8 +3,7 @@
 """
     Fetch streams and display built-in notification that lanch stream on clic
     Author: Nicolas Van Wallendael <nicolas.vanwallendael@student.uclouvain.be>
-    Antoine Van Malleghem  <antoine.vanmalleghem@student.uclouvain.be>
-    Copyright (C) 2016, Université catholique de Louvain
+    Copyright (C) 2016, Nicolas Van Wallendael
 """
 
 import sys, json, requests, os, urllib, pickle
