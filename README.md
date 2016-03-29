@@ -6,7 +6,7 @@ Each notification has the title of the stream and the stream logo.
 Each notification is also click-able and launch the stream in mpv.
 Offline notification open 'Twitch following' on default browser.
 
-This script suppose the use of python3, mpv (https://github.com/mpv-player/mpv), livestreamer (https://github.com/chrippa/livestreamer) and terminal-notifier (https://github.com/julienXX/terminal-notifier).
+This script suppose the use of python3 + requests, mpv (https://github.com/mpv-player/mpv), livestreamer (https://github.com/chrippa/livestreamer) and terminal-notifier (https://github.com/julienXX/terminal-notifier). (All available throygh brew or pip3)
 
 
 ## TO MAKE IT WORK
