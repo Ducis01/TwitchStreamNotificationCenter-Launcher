@@ -12,7 +12,7 @@
 		<string>/Users/Nico/.stream/</string>
 		<string>/usr/local/bin/terminal-notifier</string>
 		<string>/usr/local/bin/livestreamer</string>
-		<string>/usr/local/Cellar/mpv/0.16.0/bin/mpv</string>
+		<string>/usr/local/Cellar/mpv/0.17.0/bin/mpv</string>
 	</array>
 	<key>Nice</key>
 	<integer>1</integer>
