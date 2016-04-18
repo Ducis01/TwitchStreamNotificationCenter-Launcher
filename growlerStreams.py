@@ -12,6 +12,11 @@ from subprocess import check_output, PIPE, call
 # Glob Var
 STATUS = "status"
 LOGO   = "logo"
+BOX    = "box"
+GAME   = "game"
+
+POPUL  = "popularity"
+LARGE  = "large"
 
 USER   = sys.argv[1]
 DIR    = sys.argv[2]
@@ -45,6 +50,8 @@ def load_obj(name ):
 # Request URL
 url_follow = "https://api.twitch.tv/kraken/users/" + USER + "/follows/channels?direction=DESC&limit=500&offset=0&sortby=created_at"
 url_online = "https://api.twitch.tv/kraken/streams?channel="
+url_game_0 = "https://api.twitch.tv/kraken/search/games?query="
+url_game_1 = "&type=suggest"
 
 
 # GET list of streamer followed by #user
@@ -64,9 +71,8 @@ data    = requests.get(url_online, headers=headers)
 
 api     = data.json()["streams"];
 
-stream  = [[ap["channel"]["display_name"], ap["channel"][STATUS], ap["channel"][LOGO]] for ap in api]
-stream  = {streamer: {STATUS : status, LOGO : logo}  for [streamer, status, logo] in stream}
-
+stream  = [[ap["channel"]["display_name"], ap["channel"][STATUS], ap["channel"][LOGO], ap["channel"][GAME]] for ap in api]
+stream  = {streamer: {STATUS : status, LOGO : logo, GAME : game.replace(" ","+")}  for [streamer, status, logo, game] in stream}
 
 
 # Mac OS X Notifiactions
@@ -91,10 +97,20 @@ for streamer in stream.keys() :
     if streamer not in prev_stream or streamer not in current_notif or \
         stream[streamer][STATUS] != prev_stream[streamer][STATUS]:
         
-        
         # Fetch the logo if we dont have it locally
-        if not os.path.isfile(streamer) :
+        if not os.path.isfile(tmp + streamer) :
             urllib.request.urlretrieve(stream[streamer][LOGO], tmp + streamer)
+
+        # Fetch the game BOX image if we dont have it locally
+        if not os.path.isfile(tmp + stream[streamer][GAME]):
+            
+            url_game = url_game_0 + stream[streamer][GAME] + url_game_1
+            data     = requests.get(url_game, headers=headers)
+            api      = data.json()["games"];
+            
+            games = max([[game[POPUL], game[BOX][LARGE]] for game in api])
+            
+            urllib.request.urlretrieve(games[1], tmp + stream[streamer][GAME])
 
 
         # NOTE <> INSIDE terminal-notifier :
@@ -106,9 +122,10 @@ for streamer in stream.keys() :
         msg   = '"\\' + stream[streamer][STATUS] + '"'
         grp   = "STREAM"    + streamer
         title = '"🍿 ' + streamer + ' is LIVE 🍿 "'
-        img   =  os.path.join(tmp, streamer)
+        img   = os.path.join(tmp, streamer)
+        gameI = os.path.join(tmp, stream[streamer][GAME])
         script= '"' +  os.path.join(DIR, "bash_script_twitch.bash ") + streamer + \
-                " " + LIVESTREAMER + " " + PLAYER +\
+                " " + LIVESTREAMER + " " + PLAYER + " \\" + stream[streamer][STATUS].replace(" ", "_") + " " +\
                 '& sleep 10; killAll terminal-notifier"'
 
 
@@ -117,7 +134,7 @@ for streamer in stream.keys() :
               " -message " + msg + \
               " -title "   + title + \
               " -contentImage " + img +\
-              " -appIcon "      + TWITCH  +\
+              " -appIcon "      + gameI  +\
               " -execute "      + script
 
         # Image/Icon in "subprocess.Popen" doesn't work, since it use a PRIVATE method feature
