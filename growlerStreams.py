@@ -63,7 +63,7 @@ api     = data.json()["follows"];
 
 streamers = [ap["channel"]["display_name"] for ap in api]
 
-# Get currently online streams -> name, title and logo
+# Get currently online streams -> name, title, logo and game.
 
 url_online = url_online + ",".join(streamers)
 
@@ -93,9 +93,11 @@ for streamer in stream.keys() :
     # if new stream - show
     # if the user has clicked the notification - reshow it
     # if the status has changed - show
+    # if the game   has changed - show
     
     if streamer not in prev_stream or streamer not in current_notif or \
-        stream[streamer][STATUS] != prev_stream[streamer][STATUS]:
+        stream[streamer][STATUS] != prev_stream[streamer][STATUS] or \
+        stream[streamer][GAME]   != prev_stream[streamer][GAME]:
         
         # Fetch the logo if we dont have it locally
         if not os.path.isfile(tmp + streamer) :
@@ -117,7 +119,7 @@ for streamer in stream.keys() :
         # Note that in some circumstances the first character of
         # a message has to be escaped in order to be recognized.
         # An example of this is when using an open bracket, which
-        # has to be escaped like so: ‘\[’.
+        # has to be escaped like so: ‘\[’ (cfr. msg var.).
 
         msg   = '"\\' + stream[streamer][STATUS] + '"'
         grp   = "STREAM"    + streamer
@@ -125,7 +127,7 @@ for streamer in stream.keys() :
         img   = os.path.join(tmp, streamer)
         gameI = os.path.join(tmp, stream[streamer][GAME])
         script= '"' +  os.path.join(DIR, "bash_script_twitch.bash ") + streamer + \
-                " " + LIVESTREAMER + " " + PLAYER + " '" + stream[streamer][STATUS] + "' " +\
+                " " + LIVESTREAMER + " " + PLAYER + " '\\" + stream[streamer][STATUS] + "' " +\
                 '& sleep 10; killAll terminal-notifier"'
 
 
