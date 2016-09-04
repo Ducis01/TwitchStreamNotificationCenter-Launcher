@@ -110,6 +110,7 @@ for streamer in stream.keys() :
             data     = requests.get(url_game, headers=headers)
             api      = data.json()["games"];
             
+            # take the logo which is the more popular among all available.
             games = max([[game[POPUL], game[BOX][LARGE]] for game in api])
             
             urllib.request.urlretrieve(games[1], tmp + stream[streamer][GAME])
@@ -127,7 +128,7 @@ for streamer in stream.keys() :
         img   = os.path.join(tmp, streamer)
         gameI = os.path.join(tmp, stream[streamer][GAME])
         script= '"' +  os.path.join(DIR, "bash_script_twitch.bash ") + streamer + \
-                " " + LIVESTREAMER + " " + PLAYER + " '\\" + stream[streamer][STATUS] + "' " +\
+                " " + LIVESTREAMER + " " + PLAYER + " '" + stream[streamer][STATUS] + "' " +\
                 '& sleep 10; killAll terminal-notifier"'
 
 
