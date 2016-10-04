@@ -55,7 +55,7 @@ url_game_1 = "&type=suggest"
 
 
 # GET list of streamer followed by #user
-headers = {'Accept': 'application/vnd.twitchtv.v3+json'}
+headers = {'Accept': 'application/vnd.twitchtv.v3+json', 'Client-ID': 'sakgyrm922mln5jckrew3a3uzt4xoed'}
 
 data    = requests.get(url_follow, headers=headers)
 
