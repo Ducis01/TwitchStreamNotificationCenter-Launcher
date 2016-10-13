@@ -27,7 +27,12 @@ This script must be set with launchD to work every minute :
 > launchctl load $HOME/Library/LaunchAgents/be.ducis01.notiftwitch.agent.plist  
 > chmod +x *.bash 
 
+> Also dont forget to create a Twitch Authenticate token to make request :
+> This as to be added under .livestreamerrc 
+>> \# Authenticate with Twitch
+>> twitch-oauth-token= ***********************
 
+twitch-oauth-token=
 ## Screenshots :
 
 ![Image of a Notification](https://raw.githubusercontent.com/Ducis01/TwitchStreamNotificationCenter-Launcher/master/screenshot/notification.png)
