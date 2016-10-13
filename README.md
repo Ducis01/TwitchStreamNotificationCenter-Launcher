@@ -28,11 +28,10 @@ This script must be set with launchD to work every minute :
 > chmod +x *.bash 
 
 > Also dont forget to create a Twitch Authenticate token to make request :
-> This as to be added under .livestreamerrc 
+> This has to be added under .livestreamerrc 
 >> \# Authenticate with Twitch \n
 >> twitch-oauth-token= ***********************
 
-twitch-oauth-token=
 ## Screenshots :
 
 ![Image of a Notification](https://raw.githubusercontent.com/Ducis01/TwitchStreamNotificationCenter-Launcher/master/screenshot/notification.png)
