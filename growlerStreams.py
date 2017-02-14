@@ -83,8 +83,8 @@ prev_stream = load_obj("prev_stream")
 # Get current notifications
 process = check_output([TERMINAL_NOTIFIER, '-list', 'ALL'])
 
-current_notif = str(process).split("\\n")
-current_notif = [ notif.split("\\t")[0].replace("STREAM", "") for notif in current_notif][1:-1]
+current_notif = eval(process)
+current_notif = [ notif["GroupID"].replace("STREAM", "") for notif in current_notif]
 
 # For online streams
 for streamer in stream.keys() :
